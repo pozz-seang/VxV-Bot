@@ -1,6 +1,7 @@
 const { user } = require("../core/datauser");
+const { formatNumberM } = require("./functions");
 const { getName } = require("./user");
-const { changeMoney } = require("./wallet");
+const { changeMoney, balance } = require("./wallet");
 
 const gameFlip = async (msg, req) => {
   const pFlip = ["tails", "heads"];
@@ -11,12 +12,12 @@ const gameFlip = async (msg, req) => {
   };
 
   if (req[1]) {
-    if (Number(req[1]) == NaN)
+    if (isNaN(req[1]))
       return msg.channel.send(`🚫** | ${getName(msg)}**, Invalid arguments!!`);
     cf.money = Number(req[1]);
   }
 
-  if (user[msg.author.id].money<cf.money) return msg.channel.send(
+  if (balance(msg.author.id) < cf.money) return msg.channel.send(
     `**🚫 | ${getName(msg)}** you don't have enough coin!`
   );
 
@@ -38,16 +39,12 @@ const gameFlip = async (msg, req) => {
     }
   }
 
-  const msgRef = await msg.channel.send(
-    `**${getName(msg)}** spent 💵 **${cf.money}** and chose **${
-      cf.bit
-    }**\n The coin spins... 🪙`
-  );
+  const msgRef = await msg.channel.send(`**${getName(msg)}** spent 💵 **${formatNumberM(cf.money)}** and chose **${cf.bit}**\n The coin spins... 🪙`);
 
   const flip = pFlip[Math.floor(Math.random() * pFlip.length)];
 
   if (cf.bit == flip) {
-    cf.msg = `won 💵 **${cf.money * 2}**`;
+    cf.msg = `won 💵 **${formatNumberM(cf.money * 2)}**`;
     changeMoney(msg.author.id, +cf.money);
   } else {
     changeMoney(msg.author.id, -cf.money);
@@ -55,11 +52,7 @@ const gameFlip = async (msg, req) => {
   }
 
   setTimeout(() => {
-    msgRef.edit(
-      `**${getName(msg)}** spent 💵 **${cf.money}** and chose **${
-        cf.bit
-      }**\n The coin spins... 🪙 and you ${cf.msg}`
-    );
+    msgRef.edit(`**${getName(msg)}** spent 💵 **${formatNumberM(cf.money)}** and chose **${cf.bit}**\n The coin spins... 🪙 and you ${cf.msg}`);
   }, 1000);
 };
 
@@ -139,8 +132,8 @@ async function gFlip(msg, req) {
     sendEB(
       msg,
       results +
-        "! Your new balance is: " +
-        new Intl.NumberFormat().format(money)
+      "! Your new balance is: " +
+      new Intl.NumberFormat().format(money)
     );
 
     //cooldonw

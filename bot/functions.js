@@ -1,8 +1,13 @@
 const { EmbedBuilder } = require("discord.js")
 
+const formatNumberM = (number)=>{
+  return Number(number).toLocaleString()
+}
+
 module.exports = {
     sendEB,
-    avatar
+    avatar,
+    formatNumberM
 }
 
 function sendEB(msg, text){

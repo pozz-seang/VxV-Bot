@@ -3,8 +3,9 @@ const { app } = require("./config");
 const statusOptions = require("./bot/optionsStatus");
 const { gameFlip } = require("./bot/game");
 const { getName } = require("./bot/user");
-const { Balance, changeMoney } = require("./bot/wallet");
+const { balance, changeMoney, addMoney } = require("./bot/wallet");
 const { checkUser, saveData } = require("./core/datauser");
+const { formatNumberM } = require("./bot/functions");
 
 const client = new Client({
   intents: [
@@ -43,15 +44,12 @@ client.on("messageCreate", async (msg) => {
     case "bal":
     case "balance":
     case "cash":
-      msg.channel.send(
-        `💵 **| ${getName(msg)}**, you currently have **__${Balance(
-          msg.author.id
-        )}__ !**`
-      );
+      msg.channel.send(`💵 **| ${getName(msg)}**, you currently have **__${formatNumberM(balance(msg.author.id))}__ !**`);
       break;
-
+    case 'add':
+      addMoney(msg, req[1])
+      break
   }
-
 
   saveData();
 });
