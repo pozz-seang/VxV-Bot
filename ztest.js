@@ -1,3 +1,5 @@
+const si = require("systeminformation");
+
 const extendedNumberFormat = (num) => {
   const oldNumber = num.split("");
   for (let i = 0; i < oldNumber.length; i++) {

@@ -44,7 +44,7 @@ client.on("messageCreate", async (msg) => {
     case "bal":
     case "balance":
     case "cash":
-      msg.channel.send(`💵 **| ${getName(msg)}**, you currently have **__${formatNumberM(balance(msg.author.id))}__ !**`);
+      msg.channel.send(`<:som_luy_owo:1173315966642434088>💵 **| ${getName(msg)}**, you currently have **__${formatNumberM(balance(msg.author.id))}__ !**`);
       break;
     case 'add':
       addMoney(msg, req[1])
